@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>게시판 페이지</title>
+</head>
+
+<body>
+
+  <header id="header"></header>   <!--  decoupled로 표시-->
+
+    <main>
+        <header>
+            <h1>첫번째 글</h1>
+        </header>
+
+        <aside>
+            <p>wofud</p>
+            <p><a href="www.naver.com">www.naver.com</a></p>
+            <p><time datetime="2023-01-01T00:00:00">2023-01-01</time> </p>
+            <p>#java</p>
+        </aside>
+
+        <section>
+            <p>본문<br><br></p>
+
+            <div>
+                <form>
+                    <label for="articleComment" hidden>댓글</label>
+                    <textarea id="articleComment" placeholder="댓글 쓰기..." rows="3"></textarea>
+                    <button type="submit">쓰기</button>
+                </form>
+
+                <ul>
+                    <li>
+                        <div>
+                            <time><small>2023-01-01</small></time>
+                            <strong>wofud</strong>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                Lorem ipsum dolor sit amet
+                            </p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div>
+                            <time><small>2022-01-01</small></time>
+                            <strong>wofud</strong>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                Lorem ipsum dolor sit amet
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <nav>
+                <a href="#">이전 글</a>
+                <a href="#">다음 글</a>
+            </nav>
+        </section>
+    </main>
+
+    <footer th:replace="~{footer::footer}"></footer>     <!--그냥 thymeleaf-->
+
+</body>
+</html>
