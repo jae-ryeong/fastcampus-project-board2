@@ -21,7 +21,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleComment {   // 댓글
+public class ArticleComment extends AuditingFields {   // 댓글
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,14 +32,6 @@ public class ArticleComment {   // 댓글
     @Setter @Column(nullable = false, length = 500)
     private String content;     // 본문
 
-    @CreatedDate @Column(nullable = false)
-    private LocalDateTime createdAt;    // 생성일자
-    @CreatedBy @Column(nullable = false, length = 100)
-    private String createdBy;           // 생성자
-    @LastModifiedDate @Column(nullable = false)
-    private LocalDateTime modifiedAt;   // 수정일자
-    @LastModifiedBy @Column(nullable = false)
-    private String modifiedBy;          // 수정자
 
     private ArticleComment(Article article, String content) {
         this.article = article;
