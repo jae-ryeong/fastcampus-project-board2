@@ -36,8 +36,6 @@ public class Article extends AuditingFields{
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
     // Set Comment를 중복을 허용하지 않고 Collection으로 보겠다.
 
-
-
     protected Article() {}
 
     private Article(String title, String content, String hashtag) {
