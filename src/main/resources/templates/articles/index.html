@@ -10,7 +10,7 @@
 
 <body>
 
-    <header th:replace="~{header :: header}"></header>
+  <header id="header"></header>   <!--  decoupled로 표시-->
 
     <main>
         <form>
@@ -78,6 +78,7 @@
         </nav>
     </main>
 
-    <footer th:replace="footer::footer"></footer>
+    <footer th:replace="~{footer::footer}"></footer>     <!--그냥 thymeleaf-->
+
 </body>
 </html>
