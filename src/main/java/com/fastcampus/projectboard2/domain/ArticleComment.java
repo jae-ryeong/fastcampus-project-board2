@@ -2,13 +2,7 @@ package com.fastcampus.projectboard2.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -18,9 +12,7 @@ import java.util.Objects;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleComment extends AuditingFields {   // 댓글
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +24,8 @@ public class ArticleComment extends AuditingFields {   // 댓글
     @Setter @Column(nullable = false, length = 500)
     private String content;     // 본문
 
+    protected ArticleComment() {
+    }
 
     private ArticleComment(Article article, String content) {
         this.article = article;
@@ -55,3 +49,4 @@ public class ArticleComment extends AuditingFields {   // 댓글
         return Objects.hash(id);
     }
 }
+
