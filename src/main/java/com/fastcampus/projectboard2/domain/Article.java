@@ -2,6 +2,7 @@ package com.fastcampus.projectboard2.domain;
 
 import java.time.LocalDateTime;
 
+
 public class Article {
 
     private Long id;
