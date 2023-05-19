@@ -9,6 +9,7 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 
 @Configuration
 public class ThymeleafConfig {  // decoupled를 위해 사용
+    // decoupled를 굳이 사용하지 않아도 좋을거같다
 
     @Bean
     public SpringResourceTemplateResolver thymeleafTemplateResolver(
