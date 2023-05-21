@@ -2,6 +2,7 @@ package com.fastcampus.projectboard2.service;
 
 import com.fastcampus.projectboard2.domain.type.SearchType;
 import com.fastcampus.projectboard2.dto.ArticleDto;
+import com.fastcampus.projectboard2.dto.ArticleUpdateDto;
 import com.fastcampus.projectboard2.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,4 +28,16 @@ public class ArticleService {
     public ArticleDto searchArticle(long l) {
         return null;
     }
+
+    public void saveArticle(ArticleDto dto) {
+
+    }
+
+    public void updateArticle(long articleId, ArticleUpdateDto dto) {
+
+    }
+
+    public void deleteArticle(long articleId) {
+    }
 }
+
