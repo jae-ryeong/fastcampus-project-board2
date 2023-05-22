@@ -4,6 +4,8 @@ import com.fastcampus.projectboard2.domain.Article;
 import com.fastcampus.projectboard2.domain.QArticle;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -25,4 +27,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.createdAt).first(DateTimeExpression::eq); // API구현 29분
     }
+
+    Page<Article> findByTitle(String title, Pageable pageable);
 }
