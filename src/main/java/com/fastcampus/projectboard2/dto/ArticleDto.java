@@ -21,7 +21,7 @@ public record ArticleDto(
         );
     }
 
-    public static ArticleDto from(Article entity) {
+    public static ArticleDto from(Article entity) { // Entity를 받아서 Dto로 변환해준다.
         return new ArticleDto(
                 entity.getId(),
                 UserAccountDto.from(entity.getUserAccount()),
@@ -35,7 +35,7 @@ public record ArticleDto(
         );
     }
 
-    public Article toEntity() {
+    public Article toEntity() { // 반대로 Dto로부터 Entity를 생성하는 코드
         return Article.of(
                 userAccountDto.toEntity(), title, content, hashtag
         );
