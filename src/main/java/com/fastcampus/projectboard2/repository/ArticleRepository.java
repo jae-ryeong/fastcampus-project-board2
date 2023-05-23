@@ -28,5 +28,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
         bindings.bind(root.createdAt).first(DateTimeExpression::eq); // API구현 29분
     }
 
-    Page<Article> findByTitle(String title, Pageable pageable);
+    Page<Article> findByTitleContaining(String title, Pageable pageable);   // Containing란 모두 정확히 일치가 아닌, 포함하는 것으로도 검색 가능
+    Page<Article> findByContentContaining(String content, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String nickname, Pageable pageable);
+    Page<Article> findByHashtag(String hashtag, Pageable pageable);
 }

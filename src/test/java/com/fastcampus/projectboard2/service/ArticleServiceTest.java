@@ -8,11 +8,9 @@ import com.fastcampus.projectboard2.dto.ArticleWithCommentsDto;
 import com.fastcampus.projectboard2.dto.UserAccountDto;
 import com.fastcampus.projectboard2.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -58,14 +56,14 @@ class ArticleServiceTest {
         String searchKeyword = "title";
         Pageable pageable = Pageable.ofSize(20);
 
-        BDDMockito.given(articleRepository.findByTitle(searchKeyword, pageable)).willReturn(Page.empty());
+        BDDMockito.given(articleRepository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
 
         //when
         Page<ArticleDto> articles =  sut.searchArticles(searchType, searchKeyword, pageable);   // 제목, 본문, ID, 닉네임, 해시태그
 
         //then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findByTitle(searchKeyword, pageable);
+        then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
     }
 
     @DisplayName("게시글을 조회하면, 게시글 반환")
@@ -74,6 +72,7 @@ class ArticleServiceTest {
         //given
         Long articleId = 1L;
         Article article = createArticle();
+        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         //when
         ArticleWithCommentsDto dto = sut.getArticle(articleId);
@@ -100,7 +99,7 @@ class ArticleServiceTest {
         //then
         assertThat(t)
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("게시글이 없습니다 - articleId: " + articleId);
+                .hasMessage("게시글이 없습니다.");
         then(articleRepository).should().findById(articleId);
     }
 
@@ -125,6 +124,8 @@ class ArticleServiceTest {
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", "#springboot");
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
+        // getReferenceById는 findById와 비슷하지만 내부 동작이 다르다.
+        // 단건 조회의 경우 findById
 
         //when
         sut.updateArticle(dto);
