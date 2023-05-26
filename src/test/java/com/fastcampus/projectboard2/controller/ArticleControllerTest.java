@@ -35,7 +35,7 @@ class ArticleControllerTest {
 
     public ArticleControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
-    }
+    }   // 생성자 주입
 
 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
