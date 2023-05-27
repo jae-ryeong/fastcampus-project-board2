@@ -5,7 +5,7 @@ import com.fastcampus.projectboard2.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
-public record ArticleDto(
+public record ArticleDto(   // record에 대해 좀 더 공부할것
         Long id,
         UserAccountDto userAccountDto,
         String title,
