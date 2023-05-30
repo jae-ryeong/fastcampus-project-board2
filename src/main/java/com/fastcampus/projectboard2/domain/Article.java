@@ -51,6 +51,12 @@ public class Article extends AuditingFields{
 
     public static Article of(UserAccount userAccount, String title, String content, String hashtag) {    // 팩토리 메서드 패턴인듯??
         return new Article(userAccount, title, content, hashtag);
+
+        /*
+        팩토리 메소드:
+        of 메소드는 팩토리 메소드 역할을 하며 제공된 매개변수로 Article 클래스의 인스턴스를 생성합니다.
+        팩터리 메서드는 개체 생성 프로세스를 캡슐화하고 인스턴스를 생성하는 명확하고 표현적인 방법을 제공합니다.
+        */
     }
 
     @Override
