@@ -5,7 +5,7 @@ import com.fastcampus.projectboard2.dto.ArticleCommentDto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public record ArticleCommentResponse(
+public record ArticleCommentResponse(   // 댓글에 대한 정보만 담고있는 DTO
         Long id,
         String content,
         LocalDateTime createdAt,
@@ -23,7 +23,7 @@ public record ArticleCommentResponse(
             nickname = dto.userAccountDto().userId();
         }
 
-        return new ArticleCommentResponse(
+        return new ArticleCommentResponse(  // ArticleCommentDto로부터 id, content, createdAt, email, nickname 5가지만 뽑아온다.
                 dto.id(),
                 dto.content(),
                 dto.createdAt(),

@@ -30,22 +30,23 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class) // Mockito를 사용할 수 있게 해준다.
 class ArticleServiceTest {
 
-    @InjectMocks private ArticleService sut;
     @Mock private ArticleRepository articleRepository;
+    @InjectMocks private ArticleService sut;
 
     @DisplayName("검색어 없이 게시글을 검색하면, 게시글 페이지를 반환한다.")
     @Test
     public void NoSearchParameters_ArticlePage() throws Exception{
         //given
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findAll(pageable)).willReturn(Page.empty());
+        given(articleRepository.findAll(pageable)).willReturn(Page.empty());    // articleRepository에서 findAll메서드를 실행하면 반드지 빈 페이지를 반환하라는 의미
+                                                                                // given으로 ~~이렇게하면 ~~이런 결과가 나온다라고 설정해주는것 https://greedy0110.tistory.com/57
 
         //when
         Page<ArticleDto> articles = sut.searchArticles(null, null, pageable);
 
         //then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findAll(pageable);
+        then(articleRepository).should().findAll(pageable); // articleRepository가 findAll을 호출했는지 검증
     }
 
     @DisplayName("검색어와 함께 게시글을 검색하면, 게시글 페이지를 반환한다.")
@@ -72,7 +73,7 @@ class ArticleServiceTest {
         //given
         Long articleId = 1L;
         Article article = createArticle();
-        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
+        given(articleRepository.findById(articleId)).willReturn(Optional.of(article));  // findById는 Optional 타입이므로 Optional.of로 받아야한다.
 
         //when
         ArticleWithCommentsDto dto = sut.getArticle(articleId);
@@ -111,7 +112,7 @@ class ArticleServiceTest {
         given(articleRepository.save(any(Article.class))).willReturn(createArticle());
 
         //when
-        sut.saveArticle(dto);
+        sut.saveArticle(dto);   // dto를 매개변수로 넣어주면 service 코드에서 entity로 변환시켜주고 저장된다.
 
         //then
         then(articleRepository).should().save(any(Article.class ));
@@ -144,10 +145,10 @@ class ArticleServiceTest {
         //given
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", "#springboot");
 
-        given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
+        given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);   // willThrow로 경고를 발생시킨다.
 
         //when
-        sut.updateArticle(dto);
+        sut.updateArticle(dto); // 경고로그는 이곳에 있다.
 
         //then
         then(articleRepository).should().getReferenceById(dto.id());
@@ -158,7 +159,7 @@ class ArticleServiceTest {
     public void DeletedList() throws Exception{
         //given
         long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId);
+        willDoNothing().given(articleRepository).deleteById(articleId); // willDoNothing은 void return타입에 대응하기 위해 사용
 
         //when
         sut.deleteArticle(articleId);

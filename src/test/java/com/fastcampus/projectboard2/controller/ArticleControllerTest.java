@@ -100,7 +100,7 @@ class ArticleControllerTest {
         return ArticleWithCommentsDto.of(
                 1L,
                 createUserAccountDto(),
-                Set.of(),
+                Set.of(),   // 테스트 코드라서 빈 껍데기를 전달해준듯 싶다. (내 예상)
                 "title",
                 "content",
                 "#java",

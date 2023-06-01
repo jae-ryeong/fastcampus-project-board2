@@ -28,14 +28,15 @@ public class ArticleController {
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map) {
         map.addAttribute("articles", articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from));
+        // searchArticles는 ArticleDto를 반환한다, 그 후 여기서 map으로 ArticleResponseDto로 바꿔준다.
         return "articles/index";
     }
 
     @GetMapping("/{articleId}")
-    public String article(@PathVariable Long articleId, ModelMap map){
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
-        map.addAttribute("article", article);
-        map.addAttribute("articleComments", article.articleCommentsResponses());
+    public String article(@PathVariable Long articleId, ModelMap map){  // 게시글 세부내역 화면 전체에 뿌려주는 controller
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));   // 게시글과 댓글 모두 한번에 가져와준다.
+        map.addAttribute("article", article);   // addAttribute로 html파일에 데이터를 넣어준다.
+        map.addAttribute("articleComments", article.articleCommentsResponses());    // 댓글부분만 떼어서 따로 가져온다.
         return "articles/detail";
     }
 }

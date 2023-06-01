@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record ArticleWithCommentsDto( // 게시글을 불러오면 그 댓글들도 모두 가져오기 위한 DTO
+                                      // service코드에서 단건 조회때 사용
         Long id,
         UserAccountDto userAccountDto,
         Set<ArticleCommentDto> articleCommentDtos,

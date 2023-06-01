@@ -25,11 +25,11 @@ public class ArticleService {
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) { // 게시글 페이지 반환
 
         if (searchKeyword == null || searchKeyword.isBlank()) {
-            return articleRepository.findAll(pageable).map(ArticleDto::from);
+            return articleRepository.findAll(pageable).map(ArticleDto::from);   // 검색창이 비어있으면 게시글페이지 전체를 반환
         }
 
         return switch (searchType){
-            case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
+            case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(entity -> ArticleDto.from(entity));  // 메서드 참조를 람다로 바꿔보았다.
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
             case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
@@ -45,12 +45,13 @@ public class ArticleService {
     }
 
     public void saveArticle(ArticleDto dto) {
-        articleRepository.save(dto.toEntity());
+        articleRepository.save(dto.toEntity()); // dto를 entity로 변환시켜준 후 저장한다.
     }
 
     public void updateArticle(ArticleDto dto) {
         try {
-            Article article = articleRepository.getReferenceById(dto.id());
+            Article article = articleRepository.getReferenceById(dto.id()); // getReferenceById() 메서드를 사용하여 엔티티 생성에 프록시 객체를 넣어주었다. 따라서 select 문이 제거
+                                                                            // 프록시만 반환, 사용하기 전까지 실제 DB 접근 X, 그렇기에 성능면에서 findbyid보다 유리
             if (dto.title() != null) {article.setTitle(dto.title());}
             if (dto.content() != null) {article.setContent(dto.content());}
 
@@ -64,4 +65,3 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 }
-

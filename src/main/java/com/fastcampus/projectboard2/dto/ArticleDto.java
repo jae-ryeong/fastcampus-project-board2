@@ -1,7 +1,6 @@
 package com.fastcampus.projectboard2.dto;
 
 import com.fastcampus.projectboard2.domain.Article;
-import com.fastcampus.projectboard2.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
