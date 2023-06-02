@@ -95,7 +95,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.empty());
 
         //when
-        Throwable t = catchThrowable(() -> sut.getArticle(articleId));
+        Throwable t = catchThrowable(() -> sut.getArticle(articleId));  // service코드에 getArtcile메서드에서 검증부분에 구현할 에러코드가 있다.
 
         //then
         assertThat(t)
@@ -109,7 +109,7 @@ class ArticleServiceTest {
     public void CreateList() throws Exception{
         //given
         ArticleDto dto = createArticleDto();
-        given(articleRepository.save(any(Article.class))).willReturn(createArticle());
+        given(articleRepository.save(any(Article.class))).willReturn(createArticle());  // Article.class아무거나를 save하면 createArticle()메서드를 실행해 테스트 예제를 만들어준다.
 
         //when
         sut.saveArticle(dto);   // dto를 매개변수로 넣어주면 service 코드에서 entity로 변환시켜주고 저장된다.
