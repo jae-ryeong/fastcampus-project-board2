@@ -4,7 +4,9 @@ import com.fastcampus.projectboard2.domain.type.SearchType;
 import com.fastcampus.projectboard2.dto.response.ArticleResponse;
 import com.fastcampus.projectboard2.dto.response.ArticleWithCommentsResponse;
 import com.fastcampus.projectboard2.service.ArticleService;
+import com.fastcampus.projectboard2.service.PaginationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,20 +17,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/articles")
 @Controller
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final PaginationService paginationService;
     @GetMapping
     public String articles(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchValue,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map) {
-        map.addAttribute("articles", articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from));
-        // searchArticles는 ArticleDto를 반환한다, 그 후 여기서 map으로 ArticleResponseDto로 바꿔준다.
+
+        Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
+        // searchArticles는 ArticleDto를 반환한다, 그 후 여기서 map으로 ArticleResponse로 바꿔준다.
+
+        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+        // pageable.getPageNumber()로 현재 페이지넘버를 알 수 있다.
+
+        map.addAttribute("articles", articles);
+        map.addAttribute("paginationBarNumbers", barNumbers);
+
         return "articles/index";
     }
 
