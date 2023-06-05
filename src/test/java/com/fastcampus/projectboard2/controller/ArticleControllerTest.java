@@ -100,7 +100,7 @@ class ArticleControllerTest {
                 get("/articles")
                         .queryParam("page", String.valueOf(pageNumber))
                         .queryParam("size", String.valueOf(pageSize))
-                        .queryParam("sort", sortName + "," + direction))
+                        .queryParam("sort", sortName + "," + direction))    // 이 세개는 뭔지 아직 잘 모르곘다.
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/index"))
