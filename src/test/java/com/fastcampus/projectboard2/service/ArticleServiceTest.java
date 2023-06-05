@@ -168,6 +168,20 @@ class ArticleServiceTest {
         then(articleRepository).should().deleteById(articleId); // save를 한번은 호출했는가 검사
     }
 
+    @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")
+    @Test
+    public void givenNothing_whenCountingArticles_thenReturnsArticleCount() throws Exception{
+        //given
+        long expected = 0L;
+        given(articleRepository.count()).willReturn(expected);
+
+        //when
+        long actual = sut.getArticleCount();
+
+        //then
+        assertThat(actual).isEqualTo(expected);
+        then(articleRepository).should().count();
+    }
     private UserAccount createUserAccount() {
         return UserAccount.of(
                 "wofud",

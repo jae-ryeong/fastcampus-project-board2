@@ -50,6 +50,8 @@ public class ArticleController {
         ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));   // 게시글과 댓글 모두 한번에 가져와준다.
         map.addAttribute("article", article);   // addAttribute로 html파일에 데이터를 넣어준다.
         map.addAttribute("articleComments", article.articleCommentsResponses());    // 댓글부분만 떼어서 따로 가져온다.
+
+        map.addAttribute("totalCount", articleService.getArticleCount());   // 마지막 글을 판단하기 위해 총 글 개수가 필요해졌고 이를 위해 count 쿼리 사용, 서비스 로직 추가
         return "articles/detail";
     }
 }
