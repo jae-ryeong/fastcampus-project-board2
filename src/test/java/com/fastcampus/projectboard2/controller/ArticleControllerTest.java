@@ -69,15 +69,20 @@ class ArticleControllerTest {
         Long ArticleId = 1L;
         given(articleService.getArticle(ArticleId)).willReturn(createArticleWithCommentsDto());
 
+        long totalCount = 1L;
+        given(articleService.getArticleCount()).willReturn(totalCount);
+
         //when & then
         mvc.perform(get("/articles/" + ArticleId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attribute("totalCount", totalCount));
 
         then(articleService).should().getArticle(ArticleId);
+        then(articleService).should().getArticleCount();
     }
 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 페이징, 정렬 기능")
@@ -100,7 +105,7 @@ class ArticleControllerTest {
                 get("/articles")
                         .queryParam("page", String.valueOf(pageNumber))
                         .queryParam("size", String.valueOf(pageSize))
-                        .queryParam("sort", sortName + "," + direction))
+                        .queryParam("sort", sortName + "," + direction))    // 이 세개는 뭔지 아직 잘 모르곘다.
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/index"))

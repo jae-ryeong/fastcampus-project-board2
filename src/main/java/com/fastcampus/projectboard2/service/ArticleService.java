@@ -64,4 +64,8 @@ public class ArticleService {
     public void deleteArticle(long articleId) {
         articleRepository.deleteById(articleId);
     }
+
+    public long getArticleCount() {
+        return articleRepository.count();   // Article Entity의 id가 몇 개인지, 전체 게시글이 몇 개인지 반환
+    }   
 }
