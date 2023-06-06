@@ -31,6 +31,6 @@ public class AuthControllerTest {
         mvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andDo(MockMvcResultHandlers.print());
+                .andDo(MockMvcResultHandlers.print());        // 테스트에서 HTTP 상태, 헤더 및 본문을 포함하여 요청 및 응답의 세부 정보를 인쇄하여 테스트를 실행할 때 출력을 검사
     }
 }

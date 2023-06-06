@@ -11,6 +11,13 @@
                 page=${articles.number},
                 sort='title' + (*{sort.getOrderFor('title')} != null ? (*{sort.getOrderFor('title').direction.name} != 'DESC' ? ',desc' : '') : '')
                 )}" />
+                <!--
+                    articles.number은 총 페이지수를 불러온다. getNumber()와 같은 역활
+                    sort에서 *은 전체를 의미한다. (전체 선택자)
+                    sort.getOrderFor('title')} != null 'title'이 null이 아니라면 그러니까 글이 하나라도 있다면
+                    direction.desc로 내림차순으로 만들어준다. direction.name에서 name은 asc 혹은 desc를 말하는것으로 어떤 정렬인지 확인하려고 사용한것
+                    결국 이 코드는 direction.name == 'asc'면 'desc'로 바꿔준다
+                -->
 
 
                 <attr sel="th.hashtag/a" th:text="'해시태그'" th:href="@{/articles(
