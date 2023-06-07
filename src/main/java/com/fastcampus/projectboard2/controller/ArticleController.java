@@ -41,6 +41,7 @@ public class ArticleController {
 
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", barNumbers);
+        map.addAttribute("searchTypes", SearchType.values());   // values()는 array[]로 넘겨준다.
 
         return "articles/index";
     }
