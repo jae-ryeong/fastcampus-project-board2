@@ -26,6 +26,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final PaginationService paginationService;
+
     @GetMapping
     public String articles(
             @RequestParam(required = false) SearchType searchType,
@@ -47,12 +48,30 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public String article(@PathVariable Long articleId, ModelMap map){  // 게시글 세부내역 화면 전체에 뿌려주는 controller
+    public String article(@PathVariable Long articleId, ModelMap map) {  // 게시글 세부내역 화면 전체에 뿌려주는 controller
         ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));   // 게시글과 댓글 모두 한번에 가져와준다.
         map.addAttribute("article", article);   // addAttribute로 html파일에 데이터를 넣어준다.
         map.addAttribute("articleComments", article.articleCommentsResponses());    // 댓글부분만 떼어서 따로 가져온다.
 
         map.addAttribute("totalCount", articleService.getArticleCount());   // 마지막 글을 판단하기 위해 총 글 개수가 필요해졌고 이를 위해 count 쿼리 사용, 서비스 로직 추가
         return "articles/detail";
+    }
+
+    @GetMapping("/search-hashtag")
+    public String searchHashtag(
+            @RequestParam(required = false) String searchValue,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            ModelMap map
+    ) {
+        Page<ArticleResponse> articles = articleService.searchArticlesViaHashtag(searchValue, pageable).map(ArticleResponse::from);
+        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+        List<String> hashtags = articleService.getHashtags();
+
+        map.addAttribute("articles", articles);
+        map.addAttribute("hashtags", hashtags);
+        map.addAttribute("paginationBarNumbers", barNumbers);
+        map.addAttribute("searchType", SearchType.HASHTAG);
+
+        return "articles/search-hashtag";
     }
 }

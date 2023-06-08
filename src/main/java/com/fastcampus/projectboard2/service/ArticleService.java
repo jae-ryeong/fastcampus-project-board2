@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -67,5 +69,19 @@ public class ArticleService {
 
     public long getArticleCount() {
         return articleRepository.count();   // Article Entity의 id가 몇 개인지, 전체 게시글이 몇 개인지 반환
-    }   
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
+        if (hashtag == null || hashtag.isBlank()) {
+            return Page.empty(pageable);
+        }
+
+        return articleRepository.findByHashtag(hashtag, pageable)
+                .map(ArticleDto::from);
+    }
+
+    public List<String> getHashtags() { // 해시태그를 중복 값 삭제 후 리스트로 반환
+        return articleRepository.findAllDistinctHashtags();
+    }
 }
