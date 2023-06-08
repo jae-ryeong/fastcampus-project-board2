@@ -65,10 +65,10 @@ public class ArticleController {
     ) {
         Page<ArticleResponse> articles = articleService.searchArticlesViaHashtag(searchValue, pageable).map(ArticleResponse::from);
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
-        List<String> hashtags = articleService.getHashtags();
+        List<String> hashtags = articleService.getHashtags();   // 모든 해시태그를 List로 만들고
 
         map.addAttribute("articles", articles);
-        map.addAttribute("hashtags", hashtags);
+        map.addAttribute("hashtags", hashtags);     // 여기서 search-hashtag.th.xml로 전달해준다.
         map.addAttribute("paginationBarNumbers", barNumbers);
         map.addAttribute("searchType", SearchType.HASHTAG);
 

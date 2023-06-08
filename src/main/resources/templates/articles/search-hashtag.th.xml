@@ -12,6 +12,9 @@
                       sort=${param.sort},
                       searchType=${searchType.name},
                       searchValue=${hashtag})}" />
+                <!-- 'text-reset'로 css문법을 처리해준듯 하다
+                       page, sort, searchType이 없어도 정상작동한다.
+                      -->
             </attr>
         </attr>
 
@@ -23,6 +26,8 @@
                 searchType=${searchType.name},
                 searchValue=${param.searchValue}
             )}"/>
+            <!-- 여기서도 page와 searchType은 없어도 잘 작동한다. -->
+
             <attr sel="th.content/a" th:text="'본문'" th:href="@{/articles/search-hashtag(
                 page=${articles.number},
                 sort='content' + (*{sort.getOrderFor('content')} != null ? (*{sort.getOrderFor('content').direction.name} != 'DESC' ? ',desc' : '') : ''),

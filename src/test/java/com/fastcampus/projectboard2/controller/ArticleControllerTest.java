@@ -139,8 +139,7 @@ class ArticleControllerTest {
         then(articleService).should().searchArticles(null, null, pageable);
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
     }
-
-    @Disabled
+    @Disabled("구현 중")
     @DisplayName("[view][GET] 게시글 검색 전용 페이지 - 정상 호출")
     @Test
     public void Article_Search_View() throws Exception{
@@ -166,9 +165,9 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/search-hashtag"))
                 .andExpect(model().attribute("articles", Page.empty())) // 데이터까지 검사 할 수 있다.
-                .andExpect(model().attribute("hashtag", hashtags))
+                .andExpect(model().attribute("hashtags", hashtags))
                 .andExpect(model().attributeExists("paginationBarNumbers"))
-                .andExpect(model().attribute("searchTypes", SearchType.HASHTAG));
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG));
 
         then(articleService).should().searchArticlesViaHashtag(eq(null), any(Pageable.class));
         then(articleService).should().getHashtags();
@@ -192,7 +191,7 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/search-hashtag"))
                 .andExpect(model().attribute("articles", Page.empty())) // 데이터까지 검사 할 수 있다.
-                .andExpect(model().attribute("hashtag", hashtags))
+                .andExpect(model().attribute("hashtags", hashtags))
                 .andExpect(model().attributeExists("paginationBarNumbers"));
 
         then(articleService).should().searchArticlesViaHashtag(eq(hashtag), any(Pageable.class));
