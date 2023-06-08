@@ -14,7 +14,7 @@ public record ArticleResponse(  // 순수 Article 정보만 있는듯 하다 (Us
         LocalDateTime createdAt,
         String email,
         String nickname
-) implements Serializable
+)
 {
     public static ArticleResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname) {
         return new ArticleResponse(id, title, content, hashtag, createdAt, email, nickname);
