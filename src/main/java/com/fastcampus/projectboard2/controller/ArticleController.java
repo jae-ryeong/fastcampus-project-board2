@@ -1,5 +1,6 @@
 package com.fastcampus.projectboard2.controller;
 
+import com.fastcampus.projectboard2.domain.type.FormStatus;
 import com.fastcampus.projectboard2.domain.type.SearchType;
 import com.fastcampus.projectboard2.dto.response.ArticleResponse;
 import com.fastcampus.projectboard2.dto.response.ArticleWithCommentsResponse;
