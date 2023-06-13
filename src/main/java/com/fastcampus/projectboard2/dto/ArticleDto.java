@@ -1,6 +1,7 @@
 package com.fastcampus.projectboard2.dto;
 
 import com.fastcampus.projectboard2.domain.Article;
+import com.fastcampus.projectboard2.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,10 @@ public record ArticleDto(   // record에 대해 좀 더 공부할것
         String createdBy,
         LocalDateTime modifiedAt,
         String modifiedBy) {
+
+    public static ArticleDto of(UserAccountDto userAccountDto, String title, String content, String hashtag) {
+        return new ArticleDto(null, userAccountDto, title, content, hashtag, null, null, null, null);
+    }
     public static ArticleDto of(Long id, UserAccountDto userAccountDto, String title, String content, String hashtag, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
         return new ArticleDto(
                 id, userAccountDto, title, content, hashtag, createdAt, createdBy, modifiedAt, modifiedBy
@@ -34,9 +39,13 @@ public record ArticleDto(   // record에 대해 좀 더 공부할것
         );
     }
 
-    public Article toEntity() { // 반대로 Dto로부터 Entity를 생성하는 코드
+/*    public Article toEntity() { // 반대로 Dto로부터 Entity를 생성하는 코드
         return Article.of(
                 userAccountDto.toEntity(), title, content, hashtag
         );
+    }*/
+
+    public Article toEntity(UserAccount userAccount) {
+        return Article.of(userAccount, title, content, hashtag);
     }
 }
