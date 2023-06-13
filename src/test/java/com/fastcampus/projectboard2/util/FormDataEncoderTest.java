@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Import;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("테스트 도구 - Form 데이터 인코더")
 @Import({FormDataEncoder.class, ObjectMapper.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -27,7 +29,7 @@ public class FormDataEncoderTest {
         //given
         TestObject obj = new TestObject(
                 "This 'is' \"test\" string.",
-                List.of("hello", "my", "friend").toString().replace(" ",""),
+                List.of("hello", "my", "friend").toString().replace(" ", ""),
                 String.join(",", "hello", "my", "friend"),
                 null,
                 1234,
@@ -41,7 +43,17 @@ public class FormDataEncoderTest {
         String result = formDataEncoder.encode(obj);
 
         //then
-        
+        assertThat(result).isEqualTo(
+                "str=This%20'is'%20%22test%22%20string." +
+                        "&listStr1=%5Bhello,my,friend%5D" +
+                        "&listStr2=hello,my,friend" +
+                        "&nullStr" +
+                        "&number=1234" +
+                        "&floatingNumber=3.14" +
+                        "&bool=false" +
+                        "&bigDecimal=10" +
+                        "&testEnum=THREE"
+        );
     }
 
     record TestObject(
@@ -54,8 +66,9 @@ public class FormDataEncoderTest {
             Boolean bool,
             BigDecimal bigDecimal,
             TestEnum testEnum
-    ){}
+    ) {
+    }
 
-    enum TestEnum{ ONE, TWO, THREE }
+    enum TestEnum {ONE, TWO, THREE}
 
 }
