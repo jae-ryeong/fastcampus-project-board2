@@ -270,7 +270,7 @@ class ArticleControllerTest {
         mvc.perform(
                 post("/articles/" + articleId + "/form")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(formDataEncoder.encode(articleRequest))
+                        .content(formDataEncoder.encode(articleRequest))    // query 파라미터로 변환해서 넣어준다.
                         .with(csrf())
         )
                 .andExpect(status().is3xxRedirection())

@@ -27,7 +27,7 @@ public class FormDataEncoder {
                 .queryParams(valueMap)
                 .encode()
                 .build()
-                .getQuery();
+                .getQuery();    // query 파라미터 부분만 추출해낸다.
         /*
         #UriComponentsBuilder + newInstance()
          -URI를 동적으로 생성해주는 클래스입니다.
