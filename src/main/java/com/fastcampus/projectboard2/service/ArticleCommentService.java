@@ -2,9 +2,11 @@ package com.fastcampus.projectboard2.service;
 
 import com.fastcampus.projectboard2.domain.Article;
 import com.fastcampus.projectboard2.domain.ArticleComment;
+import com.fastcampus.projectboard2.domain.UserAccount;
 import com.fastcampus.projectboard2.dto.ArticleCommentDto;
 import com.fastcampus.projectboard2.repository.ArticleCommentRepository;
 import com.fastcampus.projectboard2.repository.ArticleRepository;
+import com.fastcampus.projectboard2.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ public class ArticleCommentService {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Transactional(readOnly = true)
     public List<ArticleCommentDto> searchArticleComments(Long articleId) {
@@ -31,14 +34,15 @@ public class ArticleCommentService {
 
     public void saveArticleComment(ArticleCommentDto dto) {
         try {
-            articleCommentRepository.save(dto.toEntity(articleRepository.getReferenceById(dto.articleId())));
+            Article article = articleRepository.getReferenceById(dto.articleId());  // 게시글에 대한 정보
+            UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId()); // 댓글의 댓글 작성자
+            articleCommentRepository.save(dto.toEntity(article, userAccount));
             // 매개변수 dto를 ArticleComment Entity로 만들어서 저장
             // Article referenceById = articleRepository.getReferenceById(dto.articleId());
             // getReferenceById는 Id가 없을시 EntityNotFountException을 발생시킨다.
         } catch (EntityNotFoundException e) {
-            log.warn("댓글 저장 실패. 댓글의 게시글을 찾을 수 없습니다 - dto: {}", dto);
+            log.warn("댓글 저장 실패. 댓글작성에 필요헌 정보를 찾을 수 없습니다 - dto: {}", e.getLocalizedMessage());
         }
-
     }
 
     public void updateArticleComment(ArticleCommentDto dto) {

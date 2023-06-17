@@ -7,6 +7,7 @@ import com.fastcampus.projectboard2.dto.ArticleCommentDto;
 import com.fastcampus.projectboard2.dto.UserAccountDto;
 import com.fastcampus.projectboard2.repository.ArticleCommentRepository;
 import com.fastcampus.projectboard2.repository.ArticleRepository;
+import com.fastcampus.projectboard2.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,9 @@ import static org.mockito.BDDMockito.*;
 class ArticleCommentServiceTest {
 
     @InjectMocks private ArticleCommentService sut;
-
     @Mock private ArticleRepository articleRepository;
     @Mock private ArticleCommentRepository articleCommentRepository;
+    @Mock private UserAccountRepository userAccountRepository;
 
     @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
@@ -53,14 +54,16 @@ class ArticleCommentServiceTest {
     @Test
     public void Comments_save() throws Exception{
         //given
-        ArticleCommentDto dto = createArticleCommentDto("댓글");
+        ArticleCommentDto dto = createArticleCommentDto("댓글");  // 댓글 DTO 생성
 
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());   // 댓글을 쓴 유저의 ID로 유저를 찾아보면 createUserAccount()가 반환된다.
         //when
         sut.saveArticleComment(dto);
         //then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
@@ -77,6 +80,7 @@ class ArticleCommentServiceTest {
 
         //then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).shouldHaveNoInteractions(); // userAccountRepository는 아무런 Interaction도 하지 않았다.
         then(articleCommentRepository).shouldHaveNoInteractions();
     }
 
