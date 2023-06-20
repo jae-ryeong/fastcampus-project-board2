@@ -28,6 +28,8 @@ public class SecurityConfig {
     }
 */
 
+    // spring security에 대해 자세히 공부해보기
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {    //무조건 /login 페이지가 뜨지 않게 해준다.
         return http.authorizeHttpRequests(auth -> auth
