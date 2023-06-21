@@ -208,13 +208,14 @@ class ArticleServiceTest {
     public void DeletedList() throws Exception{
         //given
         long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId); // willDoNothing은 void return타입에 대응하기 위해 사용
+        String userId = "wofud";
+        willDoNothing().given(articleRepository).DeleteByIdAndUserAccount_UserId(articleId, userId); // willDoNothing은 void return타입에 대응하기 위해 사용
 
         //when
-        sut.deleteArticle(articleId);
+        sut.deleteArticle(articleId, userId);
 
         //then
-        then(articleRepository).should().deleteById(articleId); // save를 한번은 호출했는가 검사
+        then(articleRepository).should().DeleteByIdAndUserAccount_UserId(articleId, userId); // save를 한번은 호출했는가 검사
     }
 
     @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")

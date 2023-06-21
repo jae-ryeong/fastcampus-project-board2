@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public record BoardPrincipal (
@@ -47,11 +46,11 @@ public record BoardPrincipal (
         );  // 역으로 회원 정보를 저장하기 위해 생성
     }
 
-    @Override    public Collection<? extends GrantedAuthority> getAuthorities() {        return authorities;    }  // 로그인한 사용자가 어떤 권한을 가지고있냐, 여기서는 모두 동일한 권한이므로 X
+    @Override    public Collection<? extends GrantedAuthority> getAuthorities() {return authorities;}  // 로그인한 사용자가 어떤 권한을 가지고있냐, 여기서는 모두 동일한 권한이므로 X
 
-    @Override    public String getPassword() {        return username;    }
+    @Override    public String getPassword() {return password;}
 
-    @Override    public String getUsername() {        return password;    }
+    @Override    public String getUsername() {return username;}
 
     @Override    public boolean isAccountNonExpired() {        return true;    }
 
