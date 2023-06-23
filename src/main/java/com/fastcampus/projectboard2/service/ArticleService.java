@@ -66,18 +66,25 @@ public class ArticleService {
             /*Article article = articleRepository.getReferenceById(dto.id()); // getReferenceById() 메서드를 사용하여 엔티티 생성에 프록시 객체를 넣어주었다. 따라서 select 문이 제거
                                                                             // 프록시만 반환, 사용하기 전까지 실제 DB 접근 X, 그렇기에 성능면에서 findbyid보다 유리
                                                                             // null은 에러를 일으킨다.*/
-            Article article = articleRepository.getReferenceById(articleId);
-            if (dto.title() != null) {article.setTitle(dto.title());}
-            if (dto.content() != null) {article.setContent(dto.content());}
+            Article article = articleRepository.getReferenceById(articleId);    // 게시글 id
+            UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());    // 게시글을 쓴 유저의 id
 
+            if(article.getUserAccount().equals(userAccount)) { // 게시글 사용자와 인증된 사용자가 동일인인지 검사
+                if (dto.title() != null) {
+                    article.setTitle(dto.title());
+                }
+                if (dto.content() != null) {
+                    article.setContent(dto.content());
+                }
+            }
             article.setHashtag(dto.hashtag());  // null값 허용이므로 if문이 필요없다
         } catch (EntityNotFoundException e){
-            log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto); // {}이거는 string 인터폴레이션 기법
+            log.warn("게시글 업데이트 실패. 게시글을 수정하는데 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage()); // {}이거는 string 인터폴레이션 기법
         }
     }
 
-    public void deleteArticle(long articleId) {
-        articleRepository.deleteById(articleId);
+    public void deleteArticle(long articleId, String userId) {
+        articleRepository.deleteByIdAndUserAccount_UserId(articleId, userId);
     }
 
     public long getArticleCount() {

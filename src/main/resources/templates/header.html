@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -15,8 +17,9 @@
             </ul>
 
             <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+                <span id="username" class="text-white me-2" sec:authorize="isAuthenticated()" sec:authentication="name">username</span>
+                <a role="button" id="login" class="btn btn-outline-light me-2" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+                <a role="button" id="logout" class="btn btn-outline-light me-2" sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a>
             </div>
         </div>
     </div>

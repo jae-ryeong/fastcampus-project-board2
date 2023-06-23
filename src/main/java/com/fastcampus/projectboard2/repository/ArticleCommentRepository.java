@@ -27,4 +27,6 @@ public interface ArticleCommentRepository extends JpaRepository<ArticleComment, 
     }
 
     List<ArticleComment> findByArticle_Id(Long articleId);
+
+    void deleteByIdAndUserAccount_UserId(Long articleCommentId, String userId);
 }

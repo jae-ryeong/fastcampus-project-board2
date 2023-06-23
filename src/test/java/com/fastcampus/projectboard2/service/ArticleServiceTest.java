@@ -177,6 +177,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
         // getReferenceById는 findById와 비슷하지만 내부 동작이 다르다.
         // 단건 조회의 경우 findById
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(dto.userAccountDto().toEntity());
 
         //when
         sut.updateArticle(dto.id(), dto);
@@ -187,6 +188,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", dto.content())
                 .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
         then(articleRepository).should().getReferenceById(dto.id());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
     }
 
     @DisplayName("없는 게시글의 수정 정보를 입력하면, 경고 로그를 찍고 아무 것도 하지 않는다.")
@@ -208,13 +210,14 @@ class ArticleServiceTest {
     public void DeletedList() throws Exception{
         //given
         long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId); // willDoNothing은 void return타입에 대응하기 위해 사용
+        String userId = "wofud";
+        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId); // willDoNothing은 void return타입에 대응하기 위해 사용
 
         //when
-        sut.deleteArticle(articleId);
+        sut.deleteArticle(articleId, userId);
 
         //then
-        then(articleRepository).should().deleteById(articleId); // save를 한번은 호출했는가 검사
+        then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId); // save를 한번은 호출했는가 검사
     }
 
     @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")

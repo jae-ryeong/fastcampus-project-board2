@@ -63,8 +63,8 @@ public class Article extends AuditingFields{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Article article = (Article) o;
-        return id != null && id.equals(article.id); // 아직 영속화 되지 않은 id들은 내용 해시태그등 모든게 똑같아도 다르게 취급하겠다는 의미 (데이터베이스 접근로직2 23분 정도)
+        Article that = (Article) o;
+        return id != null && id.equals(that.getId()); // 아직 영속화 되지 않은 id들은 내용 해시태그등 모든게 똑같아도 다르게 취급하겠다는 의미 (데이터베이스 접근로직2 23분 정도)
     }
 
     @Override

@@ -45,7 +45,7 @@ public class ArticleComment extends AuditingFields {   // 댓글
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArticleComment that = (ArticleComment) o;
-        return id != null && id.equals(that.id);
+        return id != null && id.equals(that.getId());
     }
 
     @Override
