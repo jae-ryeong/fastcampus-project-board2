@@ -211,13 +211,13 @@ class ArticleServiceTest {
         //given
         long articleId = 1L;
         String userId = "wofud";
-        willDoNothing().given(articleRepository).DeleteByIdAndUserAccount_UserId(articleId, userId); // willDoNothing은 void return타입에 대응하기 위해 사용
+        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId); // willDoNothing은 void return타입에 대응하기 위해 사용
 
         //when
         sut.deleteArticle(articleId, userId);
 
         //then
-        then(articleRepository).should().DeleteByIdAndUserAccount_UserId(articleId, userId); // save를 한번은 호출했는가 검사
+        then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId); // save를 한번은 호출했는가 검사
     }
 
     @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")
