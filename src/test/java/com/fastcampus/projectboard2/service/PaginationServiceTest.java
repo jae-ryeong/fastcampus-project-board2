@@ -29,8 +29,6 @@ class PaginationServiceTest {
     @ParameterizedTest(name = "[{index}] {0}, {1} => {2}")  // 동일한 메서드를 여러번 출력하는 어노테이션, index는 현재 테스트 번호, 입력 값 => 출력 값 (실행해보면 안다)
     public void givenPageNumber(int currentPageNumber, int totalPages, List<Integer> expected) throws Exception{
         //given
-
-
         //when
         List<Integer> actual = sut.getPaginationBarNumbers(currentPageNumber, totalPages);  // currentPageNumber도 index 넘버이기 때문에 0부터 출발한다.
 
