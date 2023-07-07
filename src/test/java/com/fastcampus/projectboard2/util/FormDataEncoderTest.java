@@ -13,8 +13,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("테스트 도구 - Form 데이터 인코더")
-@Import({FormDataEncoder.class, ObjectMapper.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.NONE,
+        classes = {FormDataEncoder.class, ObjectMapper.class}
+)
 public class FormDataEncoderTest {  // 테스트가 실패한다.
 
     private final FormDataEncoder formDataEncoder;
