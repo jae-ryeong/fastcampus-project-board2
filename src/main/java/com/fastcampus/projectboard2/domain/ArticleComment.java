@@ -18,10 +18,13 @@ public class ArticleComment extends AuditingFields {   // 댓글
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter @ManyToOne(optional = false) // optional하지 않다 = 필수값이다. cascade 댓글을 지웠을때 게시글이 영향을 받으면 안되므로 추가 X
+    @Setter
+    @ManyToOne(optional = false) // optional하지 않다 = 필수값이다. cascade 댓글을 지웠을때 게시글이 영향을 받으면 안되므로 추가 X
     private Article article;    // 게시글 (ID)
 
-    @Setter @ManyToOne(optional = false) @JoinColumn(name = "userId")
+    @Setter
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userId")
     private UserAccount userAccount;
 
     @Setter @Column(nullable = false, length = 500)
