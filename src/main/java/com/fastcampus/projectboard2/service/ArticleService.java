@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +39,9 @@ public class ArticleService {
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
             case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case HASHTAG -> articleRepository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::from);
+            case HASHTAG -> articleRepository.findByHashtagNames(
+                    Arrays.stream(searchKeyword.split(" ")).toList(),pageable
+            ).map(ArticleDto::from);
         };
     }
 
@@ -77,7 +80,6 @@ public class ArticleService {
                     article.setContent(dto.content());
                 }
             }
-            article.setHashtag(dto.hashtag());  // null값 허용이므로 if문이 필요없다
         } catch (EntityNotFoundException e){
             log.warn("게시글 업데이트 실패. 게시글을 수정하는데 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage()); // {}이거는 string 인터폴레이션 기법
         }
@@ -97,7 +99,7 @@ public class ArticleService {
             return Page.empty(pageable);
         }
 
-        return articleRepository.findByHashtag(hashtag, pageable)
+        return articleRepository.findByHashtagNames(null, pageable)
                 .map(ArticleDto::from);
     }
 

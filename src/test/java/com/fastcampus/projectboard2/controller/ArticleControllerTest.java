@@ -5,6 +5,7 @@ import com.fastcampus.projectboard2.domain.constant.FormStatus;
 import com.fastcampus.projectboard2.domain.constant.SearchType;
 import com.fastcampus.projectboard2.dto.ArticleDto;
 import com.fastcampus.projectboard2.dto.ArticleWithCommentsDto;
+import com.fastcampus.projectboard2.dto.HashtagDto;
 import com.fastcampus.projectboard2.dto.UserAccountDto;
 import com.fastcampus.projectboard2.dto.request.ArticleRequest;
 import com.fastcampus.projectboard2.dto.response.ArticleResponse;
@@ -68,7 +69,9 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))  // view이므로 text_html
                 .andExpect(view().name("articles/index"))
                 .andExpect(model().attributeExists("articles"))
-                .andExpect(model().attributeExists("paginationBarNumbers"));
+                .andExpect(model().attributeExists("paginationBarNumbers"))
+                .andExpect(model().attributeExists("searchTypes"))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
 
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
@@ -116,7 +119,8 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments"))
-                .andExpect(model().attribute("totalCount", totalCount));
+                .andExpect(model().attribute("totalCount", totalCount))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
 
         then(articleService).should().getArticleWithComments(ArticleId);
         then(articleService).should().getArticleCount();
@@ -243,7 +247,7 @@ class ArticleControllerTest {
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception{
         //given
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
 
         willDoNothing().given(articleService).saveArticle(any(ArticleDto.class));
 
@@ -259,9 +263,10 @@ class ArticleControllerTest {
         then(articleService).should().saveArticle(any(ArticleDto.class));
     }
 
+    @WithMockUser
     @DisplayName("[view][GET] 게시글 수정 페이지")
     @Test
-    void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
+    void givenAuthorizedUser_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         //given
         long articleId = 1L;
         ArticleDto dto = createArticleDto();
@@ -298,7 +303,7 @@ class ArticleControllerTest {
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         //given
         long articleId = 1L;
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).updateArticle(eq(articleId), any(ArticleDto.class));  // 이 부분이 없어도 테스트 성공, 명시만 해주는 듯 하다.
 
         //when & then
@@ -340,7 +345,7 @@ class ArticleControllerTest {
                 createUserAccountDto(),
                 "title",
                 "content",
-                "#java"
+                Set.of(HashtagDto.of("java"))
         );
     }
 
@@ -351,7 +356,7 @@ class ArticleControllerTest {
                 Set.of(),   // 테스트 코드라서 빈 껍데기를 전달해준듯 싶다. (내 예상)
                 "title",
                 "content",
-                "#java",
+                Set.of(HashtagDto.of("java")),
                 LocalDateTime.now(),
                 "wofud",
                 LocalDateTime.now(),
