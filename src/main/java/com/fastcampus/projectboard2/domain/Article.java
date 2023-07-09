@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,8 +33,15 @@ public class Article extends AuditingFields{
     private String title;   // 제목
     @Setter @Column(nullable = false, length = 10000)
     private String content; // 본문
-    @Setter
-    private String hashtag; // 해시태그
+
+    @ToString.Exclude
+    @JoinTable( // @JoinTable은 관리 역활을 하는 곳에다가 설정
+            name = "article_hashtag",
+            joinColumns = @JoinColumn(name = "articleId"),
+            inverseJoinColumns = @JoinColumn(name = "hashtagId")
+    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Hashtag> hashtags = new LinkedHashSet<>();
 
     @OrderBy("createdAt desc ")  // id로 정렬
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL )
@@ -43,21 +51,32 @@ public class Article extends AuditingFields{
 
     protected Article() {}
 
-    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
     }
 
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {    // 팩토리 메서드 패턴인듯??
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {    // 팩토리 메서드 패턴인듯??
+        return new Article(userAccount, title, content);
 
         /*
         팩토리 메소드:
         of 메소드는 팩토리 메소드 역할을 하며 제공된 매개변수로 Article 클래스의 인스턴스를 생성합니다.
         팩터리 메서드는 개체 생성 프로세스를 캡슐화하고 인스턴스를 생성하는 명확하고 표현적인 방법을 제공합니다.
         */
+    }
+
+    public void addHashtag(Hashtag hashtag) {
+        this.getHashtags().add(hashtag);
+    }
+
+    public void addHashtags(Collection<Hashtag> hashtags) {
+        this.getHashtags().addAll(hashtags);
+    }
+
+    public void clearHashtags() {
+        this.getHashtags().clear();
     }
 
     @Override
